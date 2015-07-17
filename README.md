@@ -9,6 +9,10 @@ Code developed throughout my PhD in order to automatically find the organs of a 
  - **external** contains code that is not used in [1,2,3] but is relevant to automated detection in fetal MRI, 
  such as the RIF features used in [4] 
 
+This code is based on <a href="https://github.com/BioMedIA/python-irtk">python-irtk</a>, a Python interface to IRTK, which can be installed through `conda`:
+
+    conda install -c kevin-keraudren python-irtk
+
 References
 ----------
 
