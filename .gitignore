@@ -1,0 +1,17 @@
+build/
+tmp/
+
+slurm*.out
+*.nii
+*.nii.gz
+*.pdf
+
+# Python
+*.py[cod]
+.ipynb_*
+*.so
+
+# Emacs
+*~
+.\#*
+\#*
