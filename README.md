@@ -13,6 +13,27 @@ This code is based on <a href="https://github.com/BioMedIA/python-irtk">python-i
 
     conda install -c kevin-keraudren python-irtk
 
+It uses OpenCV version 2 (note that SIFT features are not included by default in OpenCV 3 binaries).
+
+
+Compiling the code
+------------------
+
+    cd body-detector && make
+
+
+Running the demo
+----------------
+
+    cd body-detector && ./demo.sh
+
+Below is a screenshot of the detection results (`detection_results/stack-1/prediction_2/final_seg.nii.gz`):      
+
+<img src="body-detector/img/screenshot.png"  height="600">  
+
+A demo focusing on the brain detection is available in the repository [example-motion-correction](https://github.com/kevin-keraudren/example-motion-correction).
+
+
 References
 ----------
 
