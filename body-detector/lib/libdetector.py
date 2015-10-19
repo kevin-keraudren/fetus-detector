@@ -249,7 +249,7 @@ def cos_kernel(r):
 
 def get_narrow_band( shape, center, r_min=0, r_max=None ):
     res = np.ones( shape, dtype=bool )
-    coords = np.argwhere(res)
+    coords = np.argwhere(res).astype('float64')
     coords -= np.array( center )
     R = np.linalg.norm(coords, axis=1)
     if r_min > 0:

@@ -15,3 +15,6 @@ slurm*.out
 *~
 .\#*
 \#*
+
+# Mac
+.DS_Store

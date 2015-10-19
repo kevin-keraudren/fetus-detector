@@ -9,50 +9,33 @@ import scipy.ndimage as nd
 import numpy as np
 
 import subprocess
-
-# sys.path.append("lib")
-# from libdetector import *
+import argparse
 
 sys.path.append("../commonlib")
 from fetal_anatomy import *
 from commonlibdetector import *
 
-def get_fold(patient_id):
-    for i in range(10):
-        testing_file = "/vol/biomedic/users/kpk09/gitlab/fetal-brain-detection/10_folds/testing_"+str(i)+".tsv"
-        selected_patients = map( lambda x: x.rstrip(),
-                                 open( testing_file, 'rb' ).readlines() )
-        if patient_id in selected_patients:
-            return str(i)
-    print "No testing fold found for patient", patient_id, "using fold 0"
-    return str(0)
+parser = argparse.ArgumentParser(
+        description='' )
+parser.add_argument( '--filename', type=str, required=True ) 
+parser.add_argument( '--ga', type=float, required=True )     
+parser.add_argument( '--output_folder', type=str, default="detection_results" )        
+args = parser.parse_args()    
 
-ga_file = "/vol/vipdata/data/fetal_data/motion_correction/ga.tsv"
-
-output_folder = "/vol/vipdata/data/fetal_data/OUTPUT/whole_body_shape_padding50"
-
-all_ga = {}
-reader = csv.reader( open( ga_file, "rb"), delimiter=" " )
-for patient_id, ga in reader:
-    all_ga[patient_id] = float(ga)
-    
-def run_detection( filename ):
+if not os.path.exists(args.output_folder):
+    os.makedirs(args.output_folder)    
+   
+def run_detection( filename, ga, output_folder ):
     file_id = os.path.basename(filename).split('.')[0]
     if '_' in os.path.basename(filename):
         patient_id = file_id.split('_')[0]
     else:
         patient_id = file_id
     print patient_id 
-    if patient_id not in all_ga:
-        return
-
-    ga = all_ga[patient_id]
-    fold = get_fold(patient_id)
     
     # brain detection
-    #SCRIPT_DIR = "/vol/biomedic/users/kpk09/gitlab/irtk/wrapping/cython/scripts/"
-    vocabulary = "/vol/medic02/users/kpk09/OUTPUT/brain-detector/model/"+fold+"/vocabulary_"+fold+".npy"
-    mser_detector = "/vol/medic02/users/kpk09/OUTPUT/brain-detector/model/"+fold+"/mser_detector_"+fold+"_LinearSVC"
+    vocabulary = "../brain-detector/trained_model/vocabulary_0.npy"
+    mser_detector = "../brain-detector/trained_model/mser_detector_0_LinearSVC"
     mask_file = output_folder +"/" + file_id + "/brain_mask.nii.gz"
     cmd = [ "python",
             "../brain-detector/fetalMask_detection.py",
@@ -90,12 +73,11 @@ def run_detection( filename ):
     
     n_jobs = 5
 
-    ground_truth_folder = "/vol/bitbucket/kpk09/detector/data_resampled"
     output_folder1 = output_folder + "/" + file_id + "/prediction_1/"
     output_folder2 = output_folder + "/" + file_id + "/prediction_2"
-    detector1 = "/vol/medic02/users/kpk09/OUTPUT/stage1_pca/2379"
-    detector2 = "/vol/medic02/users/kpk09/OUTPUT/stage2_pca/2379"
-    shape_model = "/vol/medic02/users/kpk09/OUTPUT/stage1_shape/2379/shape_model.pk"
+    detector1 = "trained_model/stage1"
+    detector2 = "trained_model/stage2"
+    shape_model = "trained_model/stage1/shape_model.pk"
 
     cmd = [ "python", "predict.py",
             "--input", new_filename,
@@ -125,4 +107,4 @@ def run_detection( filename ):
    
     return
 
-run_detection( sys.argv[1] )
+run_detection( args.filename, args.ga, args.output_folder )

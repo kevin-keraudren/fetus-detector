@@ -84,7 +84,8 @@ def detect_mser( f,
     nn_classifier.fit(voca)
 
     classifier = joblib.load(mser_detector)
-    
+    classifier.classes_ = np.array([0,1],dtype='int')
+
     img = irtk.imread( f,
                        dtype='float32',
                        force_neurological=False ).saturate(1,99).rescale()
