@@ -31,10 +31,7 @@ Below is a screenshot of the detection results (`detection_results/stack-1/predi
 
 <img src="body-detector/img/screenshot.png"  height="600">  
 
-<video controls loop>
-  <source src="body-detector/example/movie.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<img src="body-detector/example/movie.gif" height="400">
 
 A demo focusing on the brain detection is available in the repository [example-motion-correction](https://github.com/kevin-keraudren/example-motion-correction).
 
